@@ -1,4 +1,4 @@
-using CnBlogPublishTool;
+ï»¿using CnBlogPublishTool;
 using CnBlogPublishTool.Processor;
 using CnBlogPublishTool.Util;
 using MetaWeblogClient;
@@ -23,6 +23,7 @@ namespace Cnblog.Tools
 			this.textConsole.BackColor = Color.FromArgb(41, 49, 52);
 			if (File.Exists(Const.Appsettings))
 			{
+				//è®°è½½é…ç½®ä¸­çš„ç›®å½•è®°å½•åˆ°combox
 				var config = JsonConvert.DeserializeObject<Appsettings>(File.ReadAllText(Const.Appsettings));
 				if (config.RecentDir?.Dirs?.Count > 0 == true)
 				{
@@ -33,10 +34,10 @@ namespace Cnblog.Tools
 			}
 
 			//ImageUploader.Init(Const.CnblogSettingPath, Const.TeaKey);
-			//var postId = ImageUploader.BlogClient.NewPost("²âÊÔ·¢²¼", "²âÊÔ·¢²¼", new List<string> { "[Markdown]" }, false, DateTime.Now);
+			//var postId = ImageUploader.BlogClient.NewPost("æµ‹è¯•å‘å¸ƒ", "æµ‹è¯•å‘å¸ƒ", new List<string> { "[Markdown]" }, false, DateTime.Now);
 			//Process.Start(new ProcessStartInfo($"https://www.cnblogs.com/ChildishChange/p/{postId}.html") { UseShellExecute = true });
 
-			//var editResult = ImageUploader.BlogClient.EditPost("16216527", "²âÊÔ·¢²¼", "²âÊÔÃèÊö222222222222222222222222222222222222222222222<br>sdsdf", new List<string> { "[Markdown]" }, false);
+			//var editResult = ImageUploader.BlogClient.EditPost("16216527", "æµ‹è¯•å‘å¸ƒ", "æµ‹è¯•æè¿°222222222222222222222222222222222222222222222<br>sdsdf", new List<string> { "[Markdown]" }, false);
 		}
 
 		private void setRecentDirs(string path)
@@ -63,7 +64,7 @@ namespace Cnblog.Tools
 		private void btnSelectFold_Click(object sender, EventArgs e)
 		{
 			FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
-			folderBrowserDialog.Description = "ÇëÑ¡Ôñ²©¿ÍmdÎÄ¼şÄ¿Â¼";
+			folderBrowserDialog.Description = "è¯·é€‰æ‹©åšå®¢mdæ–‡ä»¶ç›®å½•";
 			folderBrowserDialog.SelectedPath = Application.StartupPath;
 			folderBrowserDialog.ShowNewFolderButton = true;
 			if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
@@ -90,25 +91,25 @@ namespace Cnblog.Tools
 			DirectoryInfo tempDir = null;
 			TreeNode subNode = null;
 
-			//¶ÁÈ¡ÎÄ¼ş¼ĞÏÂµÄÄ¿Â¼
+			//è¯»å–æ–‡ä»¶å¤¹ä¸‹çš„ç›®å½•
 			string[] dics = Directory.GetDirectories(folderPath);
 			foreach (string dic in dics)
 			{
 				tempDir = new DirectoryInfo(dic);
-				subNode = new TreeNode(tempDir.Name); //ÊµÀı»¯
-				subNode.Name = new DirectoryInfo(dic).Name; //.FullName//ÍêÕûÄ¿Â¼
+				subNode = new TreeNode(tempDir.Name); //å®ä¾‹åŒ–
+				subNode.Name = new DirectoryInfo(dic).Name; //.FullName//å®Œæ•´ç›®å½•
 				subNode.Tag = subNode.Name;
-				subNode.ImageIndex = Icons.Floder;       //»ñÈ¡½ÚµãÏÔÊ¾Í¼Æ¬
-				subNode.SelectedImageIndex = Icons.Selected; //Ñ¡Ôñ½ÚµãÏÔÊ¾Í¼Æ¬
-															 //subNode.Nodes.Add("");   //¼ÓÔØ¿Õ½Úµã ÊµÏÖ+ºÅ
+				subNode.ImageIndex = Icons.Floder;       //è·å–èŠ‚ç‚¹æ˜¾ç¤ºå›¾ç‰‡
+				subNode.SelectedImageIndex = Icons.Selected; //é€‰æ‹©èŠ‚ç‚¹æ˜¾ç¤ºå›¾ç‰‡
+															 //subNode.Nodes.Add("");   //åŠ è½½ç©ºèŠ‚ç‚¹ å®ç°+å·
 
 				parentNode.Nodes.Add(subNode);
 
-				//µİ¹é¶ÁÈ¡ËùÓĞ×ÓÄ¿Â¼,ÕâÀïÎÒ¾Í²»µİ¹é¶ÁÁË
+				//é€’å½’è¯»å–æ‰€æœ‰å­ç›®å½•,è¿™é‡Œæˆ‘å°±ä¸é€’å½’è¯»äº†
 				//initTreeNode(tempDir.FullName, subNode);
 			}
 
-			//¶ÁÈ¡ÎÄ¼ş¼ĞÏÂµÄÎÄ¼ş
+			//è¯»å–æ–‡ä»¶å¤¹ä¸‹çš„æ–‡ä»¶
 			TreeNode fileNode = null;
 			string[] tempFiles = Directory.GetFiles(folderPath);
 
@@ -118,7 +119,7 @@ namespace Cnblog.Tools
 				fileNode = new TreeNode(fileFullName);
 				fileNode.Name = fileFullName;
 				fileNode.Text = Path.GetFileName(fileFullName);
-				fileNode.SelectedImageIndex = Icons.Selected; //Ñ¡Ôñ½ÚµãÏÔÊ¾Í¼Æ¬
+				fileNode.SelectedImageIndex = Icons.Selected; //é€‰æ‹©èŠ‚ç‚¹æ˜¾ç¤ºå›¾ç‰‡
 
 				if (fileFullName.Contains(".md", StringComparison.OrdinalIgnoreCase))
 				{
@@ -144,13 +145,14 @@ namespace Cnblog.Tools
 			this.DoDragDrop(data, DragDropEffects.Copy);
 		}
 
+		//æ‹–åŠ¨å¯¹è±¡è¿›å…¥æ§ä»¶è¾¹ç•Œæ—¶è§¦å‘
 		private void panel2_DragEnter(object sender, DragEventArgs e)
 		{
 			var treeNode = e?.Data?.GetDataPresent("dragnode") != null;
 
-			if (treeNode == false)
+			if (treeNode == false)//ä¸æ˜¯ä»æ ‘å½¢ç›®å½•ä¸­æ‹–æ‹½æ¥
 			{
-				if (e?.Data?.GetDataPresent(DataFormats.FileDrop) != null)
+				if (e?.Data?.GetDataPresent(DataFormats.FileDrop) != null)//æ‹–åŠ¨çš„æ•°æ®æ˜¯å¦æ˜¯æ–‡ä»¶
 				{
 					e.Effect = DragDropEffects.Copy;
 				}
@@ -199,12 +201,12 @@ namespace Cnblog.Tools
 					ImageUploader.Init(Const.CnblogSettingPath, Const.TeaKey);
 				}
 
-				object nodeItem = e.Data.GetData("dragnode");
+				object? nodeItem = e?.Data?.GetData("dragnode");
 
 				if (nodeItem != null)
 				{
 					TreeNode node = (TreeNode)nodeItem;
-					echo($"ÕıÔÚ´¦ÀíÎÄ¼ş£º{node.Name}");
+					echo($"æ­£åœ¨å¤„ç†æ–‡ä»¶ï¼š{node.Name}");
 					processFile(node.Name);
 				}
 				else
@@ -218,11 +220,11 @@ namespace Cnblog.Tools
 					else if (Const.SupportImageType.Contains(extension, StringComparison.OrdinalIgnoreCase))
 					{
 						var imgUrl = ImageUploader.Upload(dropFilePath);
-						echo($"Í¼Æ¬{dropFilePath} ÉÏ´«³É¹¦ \r\n {imgUrl}\r\n![{Path.GetFileName(dropFilePath)}]({imgUrl})");
+						echo($"å›¾ç‰‡{dropFilePath} ä¸Šä¼ æˆåŠŸ \r\n {imgUrl}\r\n![{Path.GetFileName(dropFilePath)}]({imgUrl})");
 					}
 					else
 					{
-						MessageBox.Show("ÔİÖ»Ö§³ÖÉÏ´«markdownÎÄ¼şºÍÍ¼Æ¬£¡");
+						MessageBox.Show("æš‚åªæ”¯æŒä¸Šä¼ markdownæ–‡ä»¶å’Œå›¾ç‰‡ï¼");
 					}
 				}
 			}
@@ -238,7 +240,7 @@ namespace Cnblog.Tools
 			{
 				if (!File.Exists(filePath))
 				{
-					echo("Ö¸¶¨µÄÎÄ¼ş²»´æÔÚ£¡");
+					echo("æŒ‡å®šçš„æ–‡ä»¶ä¸å­˜åœ¨ï¼");
 				}
 				else
 				{
@@ -247,24 +249,24 @@ namespace Cnblog.Tools
 					var _fileContent = File.ReadAllText(filePath);
 					var imgProcessor = new ImageProcessor();
 					var imgList = imgProcessor.Process(_fileContent);
-					echo($"ÌáÈ¡Í¼Æ¬³É¹¦£¬¹²{imgList.Count}¸ö");
+					echo($"æå–å›¾ç‰‡æˆåŠŸï¼Œå…±{imgList.Count}ä¸ª");
 
-					//Ñ­»·ÉÏ´«Í¼Æ¬
+					//å¾ªç¯ä¸Šä¼ å›¾ç‰‡
 					foreach (var img in imgList)
 					{
 						if (img.StartsWith("http", StringComparison.OrdinalIgnoreCase))
 						{
-							echo($"{img} Ìø¹ı");
+							echo($"å›¾ç‰‡è·³è¿‡ï¼š{img} ");
 							continue;
 						}
 
 						try
 						{
-							string imgPhyPath = Path.Combine(_fileDir, img);
+							string imgPhyPath = Path.Combine(_fileDir, img);//å¯èƒ½æ˜¯ç›¸å¯¹è·¯å¾„ï¼Œè·Ÿmdæ–‡ä»¶è·¯å¾„ç»„åˆä¸ºç»å¯¹è·¯å¾„
 							if (File.Exists(imgPhyPath))
 							{
 								var imgUrl = ImageUploader.Upload(imgPhyPath);
-								echo($"{img} ÉÏ´«³É¹¦+{++uploadSuccess}. {imgUrl}");
+								echo($"{img} ä¸Šä¼ æˆåŠŸ+{++uploadSuccess}. {imgUrl}");
 								if (!ReplaceDic.ContainsKey(img))
 								{
 									ReplaceDic.Add(img, imgUrl);
@@ -272,7 +274,7 @@ namespace Cnblog.Tools
 							}
 							else
 							{
-								echo($"{img} Î´·¢ÏÖÎÄ¼ş");
+								echo($"{img} æœªå‘ç°æ–‡ä»¶");
 							}
 						}
 						catch (Exception e)
@@ -281,14 +283,18 @@ namespace Cnblog.Tools
 						}
 					}
 
-					//Ìæ»»
+					//æ›¿æ¢å›¾ç‰‡é“¾æ¥
 					foreach (var key in ReplaceDic.Keys)
 					{
 						_fileContent = _fileContent.Replace(key, ReplaceDic[key]);
 					}
-					File.WriteAllText(filePath, _fileContent, EncodingType.GetType(filePath));
 
-					echo($"¹²ÌáÈ¡Í¼Æ¬{imgList.Count}£¬ÉÏ´«³É¹¦{uploadSuccess}ÕÅ£¬´¦ÀíÍê³É!");
+					//var newFileName = filePath.Substring(0, filePath.LastIndexOf('.')) + "-cnblog" + Path.GetExtension(filePath);
+					var newFileName = filePath;///TODO æ­¤å¤„åç»­æ‹“å±•å­˜å›¾è§„åˆ™
+					File.WriteAllText(newFileName, _fileContent, EncodingType.GetType(filePath));
+
+					echo($"å…±æå–å›¾ç‰‡{imgList.Count}ï¼Œä¸Šä¼ æˆåŠŸ{uploadSuccess}å¼ ï¼Œå¤„ç†å®Œæˆ!");
+					echo($"å¤„ç†åæ–‡ä»¶ä¿å­˜åœ¨ï¼š{newFileName}");
 				}
 			}
 			catch (Exception e)
@@ -298,7 +304,7 @@ namespace Cnblog.Tools
 		}
 
 		/// <summary>
-		/// Êä³öÒ»ĞĞµ½¿ØÖÆÌ¨
+		/// è¾“å‡ºä¸€è¡Œåˆ°æ§åˆ¶å°
 		/// </summary>
 		/// <param name="content"></param>
 		private void echo(string content)
@@ -369,7 +375,7 @@ namespace Cnblog.Tools
 						var title = Path.GetFileNameWithoutExtension(fileFullName);
 						var content = File.ReadAllText(treeViewFolder.SelectedNode.Name);
 						var postId = ImageUploader.BlogClient.NewPost(title, content, new List<string> { "[Markdown]" }, false, DateTime.Now);
-						echo($"¿ìËÙ±à¼­ÎÄÕÂ³É¹¦£º{$"https://www.cnblogs.com/{ImageUploader.BlogClient.BlogConnectionInfo.BlogID}/p/{postId}.html"}");
+						echo($"å¿«é€Ÿç¼–è¾‘æ–‡ç« æˆåŠŸï¼š{$"https://www.cnblogs.com/{ImageUploader.BlogClient.BlogConnectionInfo.BlogID}/p/{postId}.html"}");
 						Process.Start(new ProcessStartInfo($"https://i.cnblogs.com/posts/edit;postId={postId}") { UseShellExecute = true });
 					}
 					catch (Exception ex)
@@ -379,7 +385,7 @@ namespace Cnblog.Tools
 				}
 				else
 				{
-					MessageBox.Show("ÔİÖ»Ö§³ÖÉÏ´«markdownÎÄ¼ş(.md)¿ìËÙ±à¼­·¢²¼");
+					MessageBox.Show("æš‚åªæ”¯æŒä¸Šä¼ markdownæ–‡ä»¶(.md)å¿«é€Ÿç¼–è¾‘å‘å¸ƒ");
 				}
 			}
 		}
