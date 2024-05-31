@@ -2,10 +2,11 @@
 博客园工具
 
 ## 参考
-初始版本请查看：https://github.com/stulzq/dotnet-cnblogs-tool
-次版更新请查看：https://github.com/xle97/dotnet-cnblogs-tool
+* 初始版本请查看：https://github.com/stulzq/dotnet-cnblogs-tool
+* 次版更新请查看：https://github.com/xle97/dotnet-cnblogs-tool
   - 此版本更新了图片匹配，增加对html的图片匹配支持
-
+* 三版更新请查看：https://github.com/gebiWangshushu/Hei.Cnblog.Tools
+  - 此版本添加了winform的界面端 
     
 
 
