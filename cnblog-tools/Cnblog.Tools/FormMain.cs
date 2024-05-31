@@ -11,6 +11,9 @@ namespace Cnblog.Tools
 {
 	public partial class FormMain : Form
 	{
+		/// <summary>
+		/// ReplaceDic 用于存储替换图片链接时的映射关系
+		/// </summary>
 		private static readonly Dictionary<string, string> ReplaceDic = new Dictionary<string, string>();
 
 		public FormMain()
@@ -20,10 +23,13 @@ namespace Cnblog.Tools
 
 		private void Form1_Load(object sender, EventArgs e)
 		{
+			// 设置控制台文本背景颜色
 			this.textConsole.BackColor = Color.FromArgb(41, 49, 52);
+
+			// 如果配置文件存在，加载配置文件并初始化最近目录列表
 			if (File.Exists(Const.Appsettings))
 			{
-				//记载配置中的目录记录到combox
+				//加载配置中的目录记录到combox
 				var config = JsonConvert.DeserializeObject<Appsettings>(File.ReadAllText(Const.Appsettings));
 				if (config.RecentDir?.Dirs?.Count > 0 == true)
 				{
@@ -33,6 +39,7 @@ namespace Cnblog.Tools
 				}
 			}
 
+			// 以下注释掉的代码用于测试发布和编辑博客的功能
 			//ImageUploader.Init(Const.CnblogSettingPath, Const.TeaKey);
 			//var postId = ImageUploader.BlogClient.NewPost("测试发布", "测试发布", new List<string> { "[Markdown]" }, false, DateTime.Now);
 			//Process.Start(new ProcessStartInfo($"https://www.cnblogs.com/ChildishChange/p/{postId}.html") { UseShellExecute = true });
@@ -40,6 +47,10 @@ namespace Cnblog.Tools
 			//var editResult = ImageUploader.BlogClient.EditPost("16216527", "测试发布", "测试描述222222222222222222222222222222222222222222222<br>sdsdf", new List<string> { "[Markdown]" }, false);
 		}
 
+		/// <summary>
+		/// 设置最近目录的方法，用于更新配置文件中的目录记录
+		/// </summary>
+		/// <param name="path"></param>
 		private void setRecentDirs(string path)
 		{
 			if (File.Exists(Const.Appsettings))
@@ -61,6 +72,11 @@ namespace Cnblog.Tools
 			}
 		}
 
+		/// <summary>
+		/// “选择文件夹”按钮点击事件处理程序
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void btnSelectFold_Click(object sender, EventArgs e)
 		{
 			FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
@@ -73,6 +89,10 @@ namespace Cnblog.Tools
 			}
 		}
 
+		/// <summary>
+		/// 初始化树形节点的方法，用于显示文件和目录结构
+		/// </summary>
+		/// <param name="path"></param>
 		private void initTreeNode(string path)
 		{
 			comboxPath.Text = path;
@@ -85,6 +105,11 @@ namespace Cnblog.Tools
 			setRecentDirs(path);
 		}
 
+		/// <summary>
+		/// 重载的initTreeNode方法，用于递归添加目录和文件到树形视图
+		/// </summary>
+		/// <param name="folderPath"></param>
+		/// <param name="parentNode"></param>
 		private void initTreeNode(string folderPath, TreeNode parentNode)
 		{
 			parentNode.Text = Path.GetFileNameWithoutExtension(folderPath);
@@ -133,11 +158,21 @@ namespace Cnblog.Tools
 			}
 		}
 
+		/// <summary>
+		/// 路径选择下拉框选项变更时触发的事件处理程序
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void comboxPath_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			initTreeNode(this.comboxPath.Text);
 		}
 
+		/// <summary>
+		/// 树形视图中的项拖动时触发的事件处理程序
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void treeViewFolder_ItemDrag(object sender, ItemDragEventArgs e)
 		{
 			IDataObject data = new DataObject();
@@ -145,7 +180,11 @@ namespace Cnblog.Tools
 			this.DoDragDrop(data, DragDropEffects.Copy);
 		}
 
-		//拖动对象进入控件边界时触发
+		/// <summary>
+		/// 拖动对象进入panel2控件边界时触发的事件处理程序
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void panel2_DragEnter(object sender, DragEventArgs e)
 		{
 			var treeNode = e?.Data?.GetDataPresent("dragnode") != null;
@@ -174,6 +213,9 @@ namespace Cnblog.Tools
 			}
 		}
 
+		/// <summary>
+		/// 加载博客账户设置的方法
+		/// </summary>
 		private void loadBlogAccount()
 		{
 			if (File.Exists(Const.CnblogSettingPath) == false)
@@ -187,6 +229,11 @@ namespace Cnblog.Tools
 			}
 		}
 
+		/// <summary>
+		/// 拖放操作完成时触发的事件处理程序
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void panel2_DragDrop(object sender, DragEventArgs e)
 		{
 			try
@@ -234,6 +281,10 @@ namespace Cnblog.Tools
 			}
 		}
 
+		/// <summary>
+		/// 处理文件的方法，用于上传图片并替换Markdown中的图片链接
+		/// </summary>
+		/// <param name="filePath"></param>
 		private void processFile(string filePath)
 		{
 			try
@@ -304,7 +355,7 @@ namespace Cnblog.Tools
 		}
 
 		/// <summary>
-		/// 输出一行到控制台
+		/// 在控制台输出内容的方法，输出一行到控制台
 		/// </summary>
 		/// <param name="content"></param>
 		private void echo(string content)
@@ -312,6 +363,11 @@ namespace Cnblog.Tools
 			this.textConsole.Text += $"{content}\r\n";
 		}
 
+		/// <summary>
+		/// panel2绘制时触发的事件处理程序，用于自定义边框样式
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void panel2_Paint(object sender, PaintEventArgs e)
 		{
 			Panel pan = (Panel)sender;
@@ -324,21 +380,41 @@ namespace Cnblog.Tools
 			e.Graphics.DrawLine(pen, pan.Width - 1, pan.Height - 1, pan.Width - 1, 0);
 		}
 
+		/// <summary>
+		/// “设置”菜单项点击时触发的事件处理程序
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void ToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			new FormCnblogSetting().ShowDialog();
 		}
 
+		/// <summary>
+		/// “关于”菜单项点击时触发的事件处理程序
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void about_Click(object sender, EventArgs e)
 		{
 			new FormAbout().ShowDialog();
 		}
 
+		/// <summary>
+		/// “源代码”菜单项点击时触发的事件处理程序，打开GitHub源代码页面
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void sourceCode_Click(object sender, EventArgs e)
 		{
 			Process.Start(new ProcessStartInfo("https://github.com/lzziaini/cnblog-tools") { UseShellExecute = true });
 		}
 
+		/// <summary>
+		/// 树形视图鼠标按下时触发的事件处理程序，用于显示上下文菜单
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void treeViewFolder_MouseDown(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Right)
@@ -353,6 +429,11 @@ namespace Cnblog.Tools
 			}
 		}
 
+		/// <summary>
+		/// “新建草稿”菜单项点击时触发的事件处理程序，用于快速编辑并发布Markdown文件
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void menuItemNewDraft_Click(object sender, EventArgs e)
 		{
 			if (treeViewFolder.SelectedNode != null)
