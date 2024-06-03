@@ -153,7 +153,7 @@ namespace Cnblog.Tools
 				subNode.Tag = subNode.Name;
 				subNode.ImageIndex = Icons.Floder;       //获取节点显示图片
 				subNode.SelectedImageIndex = Icons.Selected; //选择节点显示图片
-															 //subNode.Nodes.Add("");   //加载空节点 实现+号
+				//subNode.Nodes.Add("");   //加载空节点 实现+号
 
 				parentNode.Nodes.Add(subNode);
 
