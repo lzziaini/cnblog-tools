@@ -35,7 +35,7 @@ namespace CnblogsToMarkdown
                 {
                     var pagesUrl = string.Format("http://www.cnblogs.com/"+ accountname + "/default.html?page={0}", page);
                     //抓取所有的文章内容链接地址，进行循环抓取并存储
-                    var regex = new Regex(@"class=""postTitle"">\s+<a.*?href=""(?<href>.*?)"">",
+                    var regex = new Regex(@"class=""postTitle"".*?\s+<a.*?href=""(?<href>.*?)"">",
                         RegexOptions.Singleline | RegexOptions.Multiline);
                     var matches = regex.Matches(NetworkHelper.GetHtmlFromGet(pagesUrl, Encoding.UTF8));
                     foreach (Match match in matches)
@@ -47,7 +47,7 @@ namespace CnblogsToMarkdown
                                 @"id=""cb_post_title_url"".*?>(?<title>.*?)</a>.*?<div\s+id=""cnblogs_post_body"".*?>(?<articlecontent>.*?)</div><div\s+id=""MySignature""></div>.*?<span\s+id=""post-date"">(?<date>.*?)</span>",
                                 RegexOptions.Singleline | RegexOptions.Multiline);
                         var content = NetworkHelper.GetHtmlFromGet(articleUrl, Encoding.UTF8);
-                        var regexAppName = new Regex("currentBlogApp='(?<appName>.*?)'", RegexOptions.Singleline | RegexOptions.Multiline);
+                        var regexAppName = new Regex("currentBlogApp\\s*=\\s*'(?<appName>.*?)'", RegexOptions.Singleline | RegexOptions.Multiline);
                         var matchAppName = regexAppName.Match(content);
                         var appName = string.Empty;
                         if (matchAppName.Success)
