@@ -23,7 +23,7 @@ namespace CnblogsToMarkdown
 				Directory.CreateDirectory(Application.StartupPath + "\\images\\");
 			}
 
-			CnblogsHelper.ExportToMarkdown("q787011187", 0, 10, true, "http://q787011187.com/blog/images/");
+            CnblogHtmlHelper.ExportToMarkdown("q787011187", 0, 10, true, "http://q787011187.com/blog/images/");
 
 
 			Console.WriteLine("All the Articles are generated successfully!Press any key to quit..");
