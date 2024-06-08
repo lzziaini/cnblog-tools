@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<RootNamespace>Ater.MetaWeblog</RootNamespace>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageId>Ater.MetaWeblog</PackageId>
+		<Authors>niltor</Authors>
+		<Description>.NET MetaWeBlog</Description>
+		<PackageProjectUrl>https://github.com/niltor/metaWeBlog.Cnblogs</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/niltor/metaWeBlog.Cnblogs</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>metaweblog,cnblogs,C#,.NET</PackageTags>
+		<PackageReleaseNotes>MetaWeblog for .NET</PackageReleaseNotes>
+		<Version>1.0.1</Version>
+		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+		<Title>MetaWeblog </Title>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageIcon>logo.jpg</PackageIcon>
+		<Copyright>Atersoft</Copyright>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="logo.jpg">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+
+</Project>

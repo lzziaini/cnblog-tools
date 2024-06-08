@@ -1,0 +1,28 @@
+version: 1.0.0.{build}.{branch}
+
+nuget:
+  account_feed: true
+  
+init:
+ - git config --global core.autocrlf true
+ 
+cache:
+  - '%APPDATA%\npm-cache'             # npm cache
+  
+install:
+ - cmd: nuget sources add -Name api.nuget.org -Source https://api.nuget.org/v3/index.json
+ 
+before_build:
+ - cmd: npm install gulp bower -g
+
+build_script:
+ - cmd: dotnet restore ./src/WilderMinds.MetaWeblog
+ - cmd: dotnet restore ./src/WilderMinds.MetaWeblog.Tests
+ - cmd: dotnet build ./src/WilderMinds.MetaWeblog
+ - cmd: dotnet build ./src/WilderMinds.MetaWeblog.Tests
+
+test_script:
+ - ps: cd .\src\WilderMinds.MetaWeblog.Tests
+ - cmd: dotnet test 
+
+
