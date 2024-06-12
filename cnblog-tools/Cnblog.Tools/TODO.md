@@ -17,7 +17,16 @@
 	* 图片语法转换工具
 	* 模板管理工具
 	* 批量导出md工具等
+	* 其他文档转换md工具
 	* ....
 
 
-
+## 调整
+1. 调整命名空间
+2. CnblogTools.Public
+3. CnblogTools.Winform
+	1. CnblogTools.Winform.App（框架、账号配置）
+	2. CnblogTools.Winform.PicTools（图片文件上传工具）
+4. CnblogTools.Wpf.App
+	1. CnblogTools.Wpf.App（框架、账号配置）
+	2. CnblogTools.Wpf.PicTools（图片文件上传工具）
