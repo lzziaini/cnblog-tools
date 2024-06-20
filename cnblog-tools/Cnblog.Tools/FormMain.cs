@@ -292,6 +292,8 @@ namespace Cnblog.Tools
 					ImageUploader.Init(Const.CnblogSettingPath, Const.TeaKey);
 				}
 
+				string dropFilePath = "";
+
 				// 获取拖动的节点对象
 				object? nodeItem = e?.Data?.GetData("dragnode");
 
@@ -302,36 +304,37 @@ namespace Cnblog.Tools
 					TreeNode node = (TreeNode)nodeItem;
 					// 在控制台输出处理文件信息
 					echo($"正在处理文件：{node.Name}");
-					// 处理文件（上传图片并替换Markdown中的图片链接）
-					processFile(node.Name);
+
+					dropFilePath = node.Name;
 				}
 				else
 				{
 					// 如果是外部文件拖放
 					// 获取拖放的文件路径
-					string dropFilePath = ((Array)e.Data?.GetData(DataFormats.FileDrop))?.GetValue(0)?.ToString();
-					// 获取文件扩展名
-					var extension = Path.GetExtension(dropFilePath);
-					// 如果是Markdown文件
-					if (extension.Contains(".md", StringComparison.OrdinalIgnoreCase))
-					{
-						// 处理Markdown文件
-						processFile(dropFilePath);
-					}
-					else if (Const.SupportImageType.Contains(extension, StringComparison.OrdinalIgnoreCase))
-					{
-						// 如果是支持的图片类型，上传图片
-						var imgUrl = ImageUploader.Upload(dropFilePath);
-						// 在控制台输出上传成功的信息
-						echo($"图片{dropFilePath} 上传成功 \r\n {imgUrl}\r\n![{Path.GetFileName(dropFilePath)}]({imgUrl})");
-					}
-					else
-					{
-						// 如果文件类型不支持，弹出提示框
-						MessageBox.Show("暂只支持上传markdown文件和图片！");
-					}
+					dropFilePath = ((Array)e.Data?.GetData(DataFormats.FileDrop))?.GetValue(0)?.ToString();
 				}
-			}
+
+                // 获取文件扩展名
+                var extension = Path.GetExtension(dropFilePath);
+                // 如果是Markdown文件
+                if (extension.Contains(".md", StringComparison.OrdinalIgnoreCase))
+                {
+                    // 处理文件（上传图片并替换Markdown中的图片链接）
+                    processFile(dropFilePath);
+                }
+                else if (Const.SupportImageType.Contains(extension, StringComparison.OrdinalIgnoreCase))
+                {
+                    // 如果是支持的图片类型，上传图片
+                    var imgUrl = ImageUploader.Upload(dropFilePath);
+                    // 在控制台输出上传成功的信息
+                    echo($"图片{dropFilePath} 上传成功 \r\n {imgUrl}\r\n![{Path.GetFileName(dropFilePath)}]({imgUrl})");
+                }
+                else
+                {
+                    // 如果文件类型不支持，弹出提示框
+                    MessageBox.Show("暂只支持上传markdown文件和图片！");
+                }
+            }
 			catch (Exception ex)
 			{
 				// 如果过程中出现异常，输出异常信息到控制台
