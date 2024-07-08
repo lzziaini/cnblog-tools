@@ -151,9 +151,10 @@
             panel4.Location = new Point(8, 9);
             panel4.Margin = new Padding(2, 3, 2, 3);
             panel4.Name = "panel4";
-            panel4.Size = new Size(577, 118);
+            panel4.Size = new Size(584, 118);
             panel4.TabIndex = 3;
             panel4.Visible = false;
+            panel4.Paint += panel4_Paint;
             // 
             // listboxPreProcessFiles
             // 
@@ -162,7 +163,7 @@
             listboxPreProcessFiles.ItemHeight = 17;
             listboxPreProcessFiles.Location = new Point(0, 0);
             listboxPreProcessFiles.Name = "listboxPreProcessFiles";
-            listboxPreProcessFiles.Size = new Size(577, 118);
+            listboxPreProcessFiles.Size = new Size(584, 118);
             listboxPreProcessFiles.TabIndex = 0;
             // 
             // panel3
@@ -205,7 +206,7 @@
             textConsole.Multiline = true;
             textConsole.Name = "textConsole";
             textConsole.ScrollBars = ScrollBars.Both;
-            textConsole.Size = new Size(578, 390);
+            textConsole.Size = new Size(585, 390);
             textConsole.TabIndex = 1;
             textConsole.WordWrap = false;
             // 
@@ -218,7 +219,7 @@
             panel2.Location = new Point(8, 9);
             panel2.Margin = new Padding(2, 3, 2, 3);
             panel2.Name = "panel2";
-            panel2.Size = new Size(577, 118);
+            panel2.Size = new Size(584, 118);
             panel2.TabIndex = 0;
             panel2.DragDrop += panel2_DragDrop;
             panel2.DragEnter += panel2_DragEnter;

@@ -52,37 +52,7 @@ namespace Cnblog.Tools
             //var editResult = ImageUploader.BlogClient.EditPost("16216527", "测试发布", "测试描述222222222222222222222222222222222222222222222<br>sdsdf", new List<string> { "[Markdown]" }, false);
         }
 
-        /// <summary>
-        /// 设置最近目录的方法，用于更新配置文件中的目录记录
-        /// </summary>
-        /// <param name="path"></param>
-        private void setRecentDirs(string path)
-        {
-            // 如果配置文件存在
-            if (File.Exists(Const.Appsettings))
-            {
-                // 从配置文件中反序列化配置信息
-                var config = JsonConvert.DeserializeObject<Appsettings>(File.ReadAllText(Const.Appsettings));
-                // 如果已经达到最大记录数
-                if (config.RecentDir?.Dirs?.Count >= config.RecentDir.MaxRecond)
-                {
-                    // 替换最后一个记录为当前路径
-                    config.RecentDir.Dirs[config.RecentDir.MaxRecond - 1] = path;
-                }
-                else
-                {
-                    // 如果路径已存在于记录中，先移除
-                    if (config?.RecentDir?.Dirs?.Contains(path) == true)
-                    {
-                        config.RecentDir?.Dirs.Remove(path);
-                    }
-                    // 添加路径到列表
-                    config.RecentDir?.Dirs.Add(path);
-                }
-                // 将更新后的配置信息序列化并写回配置文件
-                File.WriteAllText(Const.Appsettings, JsonConvert.SerializeObject(config));
-            }
-        }
+        #region 路径选择
 
         /// <summary>
         /// “选择文件夹”按钮点击事件处理程序
@@ -106,6 +76,21 @@ namespace Cnblog.Tools
                 initTreeNode(folderBrowserDialog.SelectedPath);
             }
         }
+
+        /// <summary>
+        /// 路径选择下拉框选项变更时触发的事件处理程序
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void comboxPath_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // 调用initTreeNode方法，根据下拉框选择的路径初始化树形节点
+            initTreeNode(this.comboxPath.Text);
+        }
+
+        #endregion
+
+        #region 树形目录
 
         /// <summary>
         /// 初始化树形节点的方法，用于显示文件和目录结构
@@ -187,15 +172,112 @@ namespace Cnblog.Tools
         }
 
         /// <summary>
-        /// 路径选择下拉框选项变更时触发的事件处理程序
+        /// 设置最近目录的方法，用于更新配置文件中的目录记录
+        /// </summary>
+        /// <param name="path"></param>
+        private void setRecentDirs(string path)
+        {
+            // 如果配置文件存在
+            if (File.Exists(Const.Appsettings))
+            {
+                // 从配置文件中反序列化配置信息
+                var config = JsonConvert.DeserializeObject<Appsettings>(File.ReadAllText(Const.Appsettings));
+                // 如果已经达到最大记录数
+                if (config.RecentDir?.Dirs?.Count >= config.RecentDir.MaxRecond)
+                {
+                    // 替换最后一个记录为当前路径
+                    config.RecentDir.Dirs[config.RecentDir.MaxRecond - 1] = path;
+                }
+                else
+                {
+                    // 如果路径已存在于记录中，先移除
+                    if (config?.RecentDir?.Dirs?.Contains(path) == true)
+                    {
+                        config.RecentDir?.Dirs.Remove(path);
+                    }
+                    // 添加路径到列表
+                    config.RecentDir?.Dirs.Add(path);
+                }
+                // 将更新后的配置信息序列化并写回配置文件
+                File.WriteAllText(Const.Appsettings, JsonConvert.SerializeObject(config));
+            }
+        }
+
+
+        /// <summary>
+        /// 树形视图鼠标按下时触发的事件处理程序，用于显示上下文菜单
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void comboxPath_SelectedIndexChanged(object sender, EventArgs e)
+        private void treeViewFolder_MouseDown(object sender, MouseEventArgs e)
         {
-            // 调用initTreeNode方法，根据下拉框选择的路径初始化树形节点
-            initTreeNode(this.comboxPath.Text);
+            // 如果是右键点击
+            if (e.Button == MouseButtons.Right)
+            {
+                // 获取鼠标点击的位置
+                Point ClickPoint = new Point(e.X, e.Y);
+                // 获取点击位置的节点
+                TreeNode currentNode = treeViewFolder.GetNodeAt(ClickPoint);
+                // 如果点击的是节点
+                if (currentNode != null)
+                {
+                    // 设置当前节点为选中状态
+                    treeViewFolder.SelectedNode = currentNode;
+                    // 显示节点的上下文菜单
+                    treeViewFolder.SelectedNode.ContextMenuStrip = contextMenuStrip1;
+                }
+            }
         }
+
+        /// <summary>
+        /// “新建草稿”菜单项点击时触发的事件处理程序，用于快速编辑并发布Markdown文件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void menuItemNewDraft_Click(object sender, EventArgs e)
+        {
+            // 检查博客设置文件，如果设置文件不存在则弹出设置对话框。
+            // 如果文件存在，则处理选中的Markdown文件，上传图片并替换链接，
+            // 最后调用博客平台的API发布文章，并在默认浏览器中打开编辑页面。
+            // 如果过程中出现异常，会捕获并输出到控制台。
+            if (treeViewFolder.SelectedNode != null)
+            {
+                if (File.Exists(Const.CnblogSettingPath) == false)
+                {
+                    new FormCnblogSetting().ShowDialog();
+                    return;
+                }
+                else
+                {
+                    ImageUploader.Init(Const.CnblogSettingPath, Const.TeaKey);
+                }
+                var fileFullName = treeViewFolder.SelectedNode.Name;
+                if (fileFullName.Contains(".md", StringComparison.OrdinalIgnoreCase))
+                {
+                    try
+                    {
+                        processFile(fileFullName);
+                        var title = Path.GetFileNameWithoutExtension(fileFullName);
+                        var content = File.ReadAllText(treeViewFolder.SelectedNode.Name);
+                        var postId = ImageUploader.BlogClient.NewPost(title, content, new List<string> { "[Markdown]" }, false, DateTime.Now);
+                        echo($"快速编辑文章成功：{$"https://www.cnblogs.com/{ImageUploader.BlogClient.BlogConnectionInfo.BlogID}/p/{postId}.html"}");
+                        Process.Start(new ProcessStartInfo($"https://i.cnblogs.com/posts/edit;postId={postId}") { UseShellExecute = true });
+                    }
+                    catch (Exception ex)
+                    {
+                        echo(ex.Message);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("暂只支持上传markdown文件(.md)快速编辑发布");
+                }
+            }
+        }
+
+        #endregion
+
+        #region 拖拽事件
 
         /// <summary>
         /// 树形视图中的项拖动时触发的事件处理程序
@@ -300,7 +382,7 @@ namespace Cnblog.Tools
                 if (!preProcessFiles.Contains(dropFilePath))
                     preProcessFiles.Add(dropFilePath);
 
-                hasFiles = true;
+                hasFiles = preProcessFiles.Any();
                 setPreProcessFilesVisible(hasFiles);
                 UpdateListboxPreProcessFiles(preProcessFiles);
 
@@ -312,6 +394,9 @@ namespace Cnblog.Tools
                 echo(ex.Message + ex.StackTrace);
             }
         }
+
+        #endregion
+
 
         /// <summary>
         /// 处理文件的方法，用于上传图片并替换Markdown中的图片链接
@@ -403,6 +488,8 @@ namespace Cnblog.Tools
             this.textConsole.Text += $"{content}\r\n";
         }
 
+        #region panel 样式
+
         /// <summary>
         /// panel2绘制时触发的事件处理程序，用于自定义边框样式
         /// </summary>
@@ -424,79 +511,37 @@ namespace Cnblog.Tools
             e.Graphics.DrawLine(pen, pan.Width - 1, pan.Height - 1, 0, pan.Height - 1);
             e.Graphics.DrawLine(pen, pan.Width - 1, pan.Height - 1, pan.Width - 1, 0);
         }
-
         /// <summary>
-        /// 树形视图鼠标按下时触发的事件处理程序，用于显示上下文菜单
+        /// panel2绘制时触发的事件处理程序，用于自定义边框样式
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void treeViewFolder_MouseDown(object sender, MouseEventArgs e)
+        private void panel4_Paint(object sender, PaintEventArgs e)
         {
-            // 如果是右键点击
-            if (e.Button == MouseButtons.Right)
-            {
-                // 获取鼠标点击的位置
-                Point ClickPoint = new Point(e.X, e.Y);
-                // 获取点击位置的节点
-                TreeNode currentNode = treeViewFolder.GetNodeAt(ClickPoint);
-                // 如果点击的是节点
-                if (currentNode != null)
-                {
-                    // 设置当前节点为选中状态
-                    treeViewFolder.SelectedNode = currentNode;
-                    // 显示节点的上下文菜单
-                    treeViewFolder.SelectedNode.ContextMenuStrip = contextMenuStrip1;
-                }
-            }
+            // 获取触发事件的Panel对象
+            Panel pan = (Panel)sender;
+            // 设置画笔宽度
+            float width = (float)4.0;
+            // 创建画笔对象，设置颜色和宽度
+            Pen pen = new Pen(SystemColors.ControlDark, width);
+            // 设置画笔样式为点线
+            pen.DashStyle = DashStyle.Dot;
+            // 绘制Panel的边框
+            e.Graphics.DrawLine(pen, 0, 0, 0, pan.Height - 0);
+            e.Graphics.DrawLine(pen, 0, 0, pan.Width - 0, 0);
+            e.Graphics.DrawLine(pen, pan.Width - 1, pan.Height - 1, 0, pan.Height - 1);
+            e.Graphics.DrawLine(pen, pan.Width - 1, pan.Height - 1, pan.Width - 1, 0);
         }
 
-        /// <summary>
-        /// “新建草稿”菜单项点击时触发的事件处理程序，用于快速编辑并发布Markdown文件
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void menuItemNewDraft_Click(object sender, EventArgs e)
-        {
-            // 检查博客设置文件，如果设置文件不存在则弹出设置对话框。
-            // 如果文件存在，则处理选中的Markdown文件，上传图片并替换链接，
-            // 最后调用博客平台的API发布文章，并在默认浏览器中打开编辑页面。
-            // 如果过程中出现异常，会捕获并输出到控制台。
-            if (treeViewFolder.SelectedNode != null)
-            {
-                if (File.Exists(Const.CnblogSettingPath) == false)
-                {
-                    new FormCnblogSetting().ShowDialog();
-                    return;
-                }
-                else
-                {
-                    ImageUploader.Init(Const.CnblogSettingPath, Const.TeaKey);
-                }
-                var fileFullName = treeViewFolder.SelectedNode.Name;
-                if (fileFullName.Contains(".md", StringComparison.OrdinalIgnoreCase))
-                {
-                    try
-                    {
-                        processFile(fileFullName);
-                        var title = Path.GetFileNameWithoutExtension(fileFullName);
-                        var content = File.ReadAllText(treeViewFolder.SelectedNode.Name);
-                        var postId = ImageUploader.BlogClient.NewPost(title, content, new List<string> { "[Markdown]" }, false, DateTime.Now);
-                        echo($"快速编辑文章成功：{$"https://www.cnblogs.com/{ImageUploader.BlogClient.BlogConnectionInfo.BlogID}/p/{postId}.html"}");
-                        Process.Start(new ProcessStartInfo($"https://i.cnblogs.com/posts/edit;postId={postId}") { UseShellExecute = true });
-                    }
-                    catch (Exception ex)
-                    {
-                        echo(ex.Message);
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("暂只支持上传markdown文件(.md)快速编辑发布");
-                }
-            }
-        }
+        #endregion
 
+
+
+
+        bool hasFiles = false;
         List<string> preProcessFiles = new List<string>();
+        bool processEnable = false;
+
         /// <summary>
         /// 清理将要处理的文件列表
         /// </summary>
@@ -508,9 +553,9 @@ namespace Cnblog.Tools
 
             SetPreProcessBtnEnable(false);
 
-            hasFiles = false;
-            setPreProcessFilesVisible(hasFiles);
             preProcessFiles = new List<string>();
+            hasFiles = preProcessFiles.Any();
+            setPreProcessFilesVisible(hasFiles);
 
             SetPreProcessBtnEnable(true);
         }
@@ -562,7 +607,6 @@ namespace Cnblog.Tools
         }
 
 
-        bool hasFiles = false;
         private void setPreProcessFilesVisible(bool hasFiles)
         {
             panel2.Visible = !hasFiles;
@@ -570,7 +614,6 @@ namespace Cnblog.Tools
             panel4.Visible = hasFiles;
             panel4.Enabled = hasFiles;
         }
-        bool processEnable = false;
         private void SetPreProcessBtnEnable(bool enable)
         {
             btnClearDrogFiles.Enabled = enable;
