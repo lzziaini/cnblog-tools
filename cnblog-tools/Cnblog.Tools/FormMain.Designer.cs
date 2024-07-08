@@ -34,7 +34,7 @@
             ToolStripMenuItem = new ToolStripMenuItem();
             sourceCode = new ToolStripMenuItem();
             about = new ToolStripMenuItem();
-            ucPicProcess1 = new UcPicProcess();
+            ucToolsList1 = new UcToolsList();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -77,20 +77,20 @@
             about.Text = "关于";
             about.Click += about_Click;
             // 
-            // ucPicProcess1
+            // ucToolsList1
             // 
-            ucPicProcess1.Location = new Point(0, 25);
-            ucPicProcess1.Margin = new Padding(2, 3, 2, 3);
-            ucPicProcess1.Name = "ucPicProcess1";
-            ucPicProcess1.Size = new Size(908, 593);
-            ucPicProcess1.TabIndex = 3;
+            ucToolsList1.Location = new Point(0, 25);
+            ucToolsList1.Margin = new Padding(2, 3, 2, 3);
+            ucToolsList1.Name = "ucToolsList1";
+            ucToolsList1.Size = new Size(908, 593);
+            ucToolsList1.TabIndex = 3;
             // 
             // FormMain
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(908, 618);
-            Controls.Add(ucPicProcess1);
+            Controls.Add(ucToolsList1);
             Controls.Add(menuStrip1);
             Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip1;
@@ -111,6 +111,6 @@
 		private ToolStripMenuItem ToolStripMenuItem;
 		private ToolStripMenuItem about;
 		private ToolStripMenuItem sourceCode;
-        private UcPicProcess ucPicProcess1;
+        private UcToolsList ucToolsList1;
     }
 }
