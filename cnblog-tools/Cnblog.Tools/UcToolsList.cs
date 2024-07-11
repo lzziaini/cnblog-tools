@@ -22,6 +22,14 @@ namespace Cnblog.Tools
         public UcToolsList()
         {
             InitializeComponent();
+            SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
+            this.UpdateStyles();
+            this.DoubleBuffered = true;
+            this.Load += new EventHandler(Uc_Loaded);
+        }
+
+        private void Uc_Loaded(object? sender, EventArgs e)
+        {
             InitializeTools();
             InitializeToolCollection();
         }
@@ -31,6 +39,7 @@ namespace Cnblog.Tools
             // 隐藏主面板来减少闪烁
             this.SuspendLayout();
 
+
             // 创建工具集合面板
             toolCollectionPanel = new FlowLayoutPanel
             {
@@ -38,6 +47,9 @@ namespace Cnblog.Tools
                 AutoScroll = true
             };
             this.Controls.Add(toolCollectionPanel);
+
+            // 预先创建所有工具控件实例
+            AddTool("图片/文件处理工具", Properties.Resources.微信二维码, new UcPicProcess());
 
             // 创建返回按钮
             backButton = new Button
@@ -70,23 +82,27 @@ namespace Cnblog.Tools
             toolHeaderPanel.Controls.Add(new Label(), 2, 0);// 添加右侧空白占位符
 
             // 创建工具面板，并添加到主窗体
-            if(toolControls.Any())
-                currentTool = toolControls.First().Value;
-            else
-                currentTool = new UserControl();
-
             toolsPanel = new Panel
             {
                 Dock = DockStyle.Fill,
-                Visible = false //初始不可见
+                //Visible = false
             };
             toolsPanel.Controls.Add(toolHeaderPanel);
-            toolsPanel.Controls.Add(currentTool);//添加默认的工具页
+            foreach (var toolControl in toolControls)
+            {
+                //toolControl.Value.Visible = false;
+                toolControl.Value.Visible = true;
+                toolsPanel.Controls.Add(toolControl.Value);
+            }
             this.Controls.Add(toolsPanel);
             toolsPanel.BringToFront();
 
-            AddToolButton("图片/文件处理", Properties.Resources.微信二维码);
-            AddToolButton("图片/文件处理工具", Properties.Resources.微信二维码);
+            //将工具面板置为初始不可见
+            foreach (var toolControl in toolControls)
+            {
+                toolControl.Value.Visible = false;
+            }
+            toolsPanel.Visible = false;
 
             // 恢复主面板的显示
             this.ResumeLayout(true);
@@ -95,11 +111,16 @@ namespace Cnblog.Tools
         private void InitializeTools()
         {
             toolControls = new Dictionary<string, UserControl>();
-            // 预先创建所有工具控件实例
-            toolControls.Add("图片/文件处理", new UcPicProcess());
-            toolControls.Add("图片/文件处理工具", new UcPicProcess());
         }
 
+        private void AddTool(string toolName, Image toolImage, UserControl userControl)
+        {
+            if (toolControls == null)
+                toolControls = new Dictionary<string, UserControl>();
+
+            toolControls.Add(toolName, userControl);
+            AddToolButton(toolName, toolImage);
+        }
         private void AddToolButton(string toolName, Image toolImage)
         {
             // 创建表示工具的按钮
@@ -117,15 +138,33 @@ namespace Cnblog.Tools
         }
         private void OpenTool(string toolName)
         {
+            // 隐藏主面板来减少闪烁
+            toolsPanel.SuspendLayout();
+
             // 更新 toolHeaderPanel 的标题，如果有的话
             UpdateToolHeader(toolName);
-            toolsPanel.Visible = true; // 显示工具页面
-            toolCollectionPanel.Visible = false; // 隐藏工具集页面
 
+            // 隐藏所有的工具控件
+            //foreach (var toolControl in toolControls)
+            //{
+            //    toolControl.Value.Visible = false ;
+            //}
+
+            if(currentTool != null)
+            {
+                currentTool.Visible = false;
+            }
             // 显示所选的工具控件
             currentTool = toolControls[toolName];
             currentTool.Dock = DockStyle.Fill;
+            currentTool.Visible = true;
             currentTool.BringToFront(); // 确保所选工具控件在最前面
+
+            toolsPanel.Visible = true; // 显示工具页面
+            toolCollectionPanel.Visible = false; // 隐藏工具集页面
+
+            // 恢复主面板的显示
+            toolsPanel.ResumeLayout(true);
         }
 
         private void backButton_Click(object sender, EventArgs e)
@@ -140,5 +179,6 @@ namespace Cnblog.Tools
             // 更新标题
             toolLabel.Text = toolName; // toolLabel 是 toolHeaderPanel 中的一个 Label 控件
         }
+
     }
 }
