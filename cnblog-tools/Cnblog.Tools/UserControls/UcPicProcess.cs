@@ -127,8 +127,12 @@ namespace Cnblog.Tools
         /// <param name="parentNode"></param>
         private void initTreeNode(string folderPath, TreeNode parentNode)
         {
+            if (!Directory.Exists(folderPath))
+                return;
+
             // 设置父节点的文本为文件夹名称
-            parentNode.Text = Path.GetFileNameWithoutExtension(folderPath);
+            //parentNode.Text = Path.GetFileNameWithoutExtension(folderPath);
+            parentNode.Text = Path.GetFileName(folderPath);//获取尾目录名
             DirectoryInfo tempDir = null;
             TreeNode subNode = null;
 
@@ -144,14 +148,14 @@ namespace Cnblog.Tools
                 subNode.Tag = subNode.Name;
                 subNode.ImageIndex = Icons.Floder;       //获取节点显示图片
                 subNode.SelectedImageIndex = Icons.Selected; //选择节点显示图片
+
                                                              //subNode.Nodes.Add("");   //加载空节点 实现+号
 
                 parentNode.Nodes.Add(subNode);
 
                 //TODO 递归读取所有子目录,这里我就不递归读了
-                //initTreeNode(tempDir.FullName, subNode);
+                initTreeNode(tempDir.FullName, subNode);
             }
-
             //读取文件夹下的文件
             TreeNode fileNode = null;
             string[] tempFiles = Directory.GetFiles(folderPath);
