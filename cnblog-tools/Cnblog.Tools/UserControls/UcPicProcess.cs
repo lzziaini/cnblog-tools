@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Drawing2D;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
@@ -292,10 +293,15 @@ namespace Cnblog.Tools
         {
             // 创建一个数据对象，用于存储拖动的数据
             IDataObject data = new DataObject();
-            // 将拖动的节点添加到数据对象中
-            data.SetData("dragnode", e.Item);
-            // 开始拖放操作
-            this.DoDragDrop(data, DragDropEffects.Copy);
+            var tree = sender as GTreeView;
+            if(tree != null)
+            {
+                // 将拖动的节点添加到数据对象中
+                //data.SetData("dragnode", e.Item);
+                data.SetData("dragnode", tree.SelectedNodeList);
+                // 开始拖放操作
+                this.DoDragDrop(data, DragDropEffects.Copy);
+            }
         }
 
         /// <summary>
@@ -360,31 +366,33 @@ namespace Cnblog.Tools
                     ImageUploader.Init(Const.CnblogSettingPath, Const.TeaKey);
                 }
 
-                string dropFilePath = "";
+                List<string> dropFilePaths = new List<string>();
 
                 // 获取拖动的节点对象
-                object? nodeItem = e?.Data?.GetData("dragnode");
+                object? nodeItems = e?.Data?.GetData("dragnode");
 
                 // 如果是树形视图中的节点
-                if (nodeItem != null)
+                if (nodeItems != null)
                 {
                     // 转换为树节点
-                    TreeNode node = (TreeNode)nodeItem;
-                    // 在控制台输出处理文件信息
-
-                    dropFilePath = node.Name;
+                    var nodes = nodeItems as List<TreeNode>;
+                    if(nodes != null)
+                        dropFilePaths = nodes.Select(n=>n.Name).ToList();
                 }
                 else
                 {
                     // 如果是外部文件拖放
                     // 获取拖放的文件路径
-                    dropFilePath = ((Array)e.Data?.GetData(DataFormats.FileDrop))?.GetValue(0)?.ToString();
+                    dropFilePaths = (e.Data?.GetData(DataFormats.FileDrop) as string[])?.ToList();
                 }
 
-                echo($"添加预处理文件：{dropFilePath}");
+                echo($"添加预处理文件：\r\n  {string.Join("\r\n  ", dropFilePaths)}");
 
-                if (!preProcessFiles.Contains(dropFilePath))
-                    preProcessFiles.Add(dropFilePath);
+                dropFilePaths.ForEach((dropFilePath) =>{
+
+                    if (!preProcessFiles.Contains(dropFilePath))
+                        preProcessFiles.Add(dropFilePath);
+                });
 
                 hasFiles = preProcessFiles.Any();
                 setPreProcessFilesVisible(hasFiles);
