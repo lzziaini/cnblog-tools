@@ -398,6 +398,11 @@ namespace Cnblog.Tools
                     dropFilePaths = (e.Data?.GetData(DataFormats.FileDrop) as string[])?.ToList();
                 }
 
+                if (dropFilePaths == null || !dropFilePaths.Any()) 
+                {
+                    return;
+                }
+
                 echo($"添加预处理文件/目录：\r\n  {string.Join("\r\n  ", dropFilePaths)}");
 
                 dropFilePaths.ForEach((dropFilePath) =>
