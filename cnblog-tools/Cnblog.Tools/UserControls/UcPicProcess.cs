@@ -144,7 +144,7 @@ namespace Cnblog.Tools
             {
                 tempDir = new DirectoryInfo(dic);
                 subNode = new TreeNode(tempDir.Name); //实例化
-                subNode.Name = new DirectoryInfo(dic).Name; //.FullName//完整目录
+                subNode.Name = new DirectoryInfo(dic).FullName; //.FullName//完整目录
                 subNode.Tag = subNode.Name;
                 subNode.ImageIndex = Icons.Floder;       //获取节点显示图片
                 subNode.SelectedImageIndex = Icons.Selected; //选择节点显示图片
@@ -390,13 +390,27 @@ namespace Cnblog.Tools
                     dropFilePaths = (e.Data?.GetData(DataFormats.FileDrop) as string[])?.ToList();
                 }
 
-                echo($"添加预处理文件：\r\n  {string.Join("\r\n  ", dropFilePaths)}");
+                echo($"添加预处理文件/目录：\r\n  {string.Join("\r\n  ", dropFilePaths)}");
 
-                dropFilePaths.ForEach((dropFilePath) =>{
-
-                    if (!preProcessFiles.Contains(dropFilePath))
-                        preProcessFiles.Add(dropFilePath);
+                dropFilePaths.ForEach((dropFilePath) =>
+                {
+                    if (File.Exists(dropFilePath))
+                    {
+                        if (!preProcessFiles.Contains(dropFilePath))
+                            preProcessFiles.Add(dropFilePath);
+                    }
+                    else if (Directory.Exists(dropFilePath))
+                    {
+                        var dropFilePaths = GetAllFilePaths(dropFilePath);
+                        dropFilePaths.ForEach(dfp =>
+                        {
+                            if (!preProcessFiles.Contains(dfp))
+                                preProcessFiles.Add(dfp);
+                        });
+                    }
                 });
+                echo($"当前预处理文件：\r\n  {string.Join("\r\n  ", preProcessFiles)}");
+
 
                 hasFiles = preProcessFiles.Any();
                 setPreProcessFilesVisible(hasFiles);
@@ -413,7 +427,20 @@ namespace Cnblog.Tools
 
         #endregion
 
-
+        public static List<string> GetAllFilePaths(string directoryPath)
+        {
+            try
+            {
+                string[] files = Directory.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories);
+                return new List<string>(files);
+            }
+            catch (Exception ex)
+            {
+                // 处理异常，比如目录不存在或没有权限等
+                Console.WriteLine("An error occurred: " + ex.Message);
+                return new List<string>(); // 返回空列表
+            }
+        }
         /// <summary>
         /// 处理文件的方法，用于上传图片并替换Markdown中的图片链接
         /// </summary>
@@ -604,12 +631,12 @@ namespace Cnblog.Tools
                         // 如果是支持的图片类型，上传图片
                         var imgUrl = ImageUploader.Upload(dropFilePath);
                         // 在控制台输出上传成功的信息
-                        echo($"图片{dropFilePath} 上传成功 \r\n {imgUrl}\r\n![{Path.GetFileName(dropFilePath)}]({imgUrl})");
+                        echo($"图片[{dropFilePath}] 上传成功 \r\n {imgUrl}\r\n![{Path.GetFileName(dropFilePath)}]({imgUrl})");
                     }
                     else
                     {
                         // 如果文件类型不支持，弹出提示框
-                        echo($"无法处理{dropFilePath}，暂只支持上传markdown文件和图片！");
+                        echo($"无法处理[{dropFilePath}]，暂只支持上传markdown文件和图片！");
                     }
                 }
                 catch (Exception ex)
