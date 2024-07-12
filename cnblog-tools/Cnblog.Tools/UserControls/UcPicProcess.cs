@@ -3,9 +3,11 @@ using CnBlogPublishTool.Processor;
 using CnBlogPublishTool.Util;
 using MetaWeblogClient;
 using Newtonsoft.Json;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Drawing2D;
 using System.IO;
+using System.Windows.Forms;
 using System.Xml.Linq;
 
 namespace Cnblog.Tools
@@ -24,6 +26,8 @@ namespace Cnblog.Tools
 
         private void UserControl_Load(object sender, EventArgs e)
         {
+            treeViewFolder.IsMultiSelect = true;
+
             // 设置控制台文本背景颜色
             this.textConsole.BackColor = Color.FromArgb(41, 49, 52);
 

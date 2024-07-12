@@ -34,7 +34,7 @@
             btnSelectFold = new Button();
             comboxPath = new ComboBox();
             splitContainer1 = new SplitContainer();
-            treeViewFolder = new TreeView();
+            treeViewFolder = new GTreeView();
             IconList = new ImageList(components);
             panel4 = new Panel();
             listboxPreProcessFiles = new ListBox();
@@ -292,7 +292,7 @@
         private Panel panel1;
         private Button btnSelectFold;
         private ComboBox comboxPath;
-        private TreeView treeViewFolder;
+        private GTreeView treeViewFolder;
         private ImageList IconList;
         private Panel panel2;
         private TextBox textConsole;
