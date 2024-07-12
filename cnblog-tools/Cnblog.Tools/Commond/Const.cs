@@ -14,6 +14,6 @@ namespace Cnblog.Tools
 
         public static byte[] TeaKey = new byte[] { 21, 52, 33, 78, 52, 45 };
 
-        public static string SupportImageType = ".gif .png .jpg .jpeg";
+        public static List<string> SupportImageType = new List<string> { ".gif", ".png", ".jpg", ".jpeg" };
     }
 }

@@ -149,7 +149,7 @@ namespace Cnblog.Tools
                 subNode.ImageIndex = Icons.Floder;       //获取节点显示图片
                 subNode.SelectedImageIndex = Icons.Selected; //选择节点显示图片
 
-                                                             //subNode.Nodes.Add("");   //加载空节点 实现+号
+                //subNode.Nodes.Add("");   //加载空节点 实现+号
 
                 parentNode.Nodes.Add(subNode);
 
@@ -599,7 +599,7 @@ namespace Cnblog.Tools
                         // 处理文件（上传图片并替换Markdown中的图片链接）
                         processFile(dropFilePath);
                     }
-                    else if (Const.SupportImageType.Contains(extension, StringComparison.OrdinalIgnoreCase))
+                    else if (Const.SupportImageType.Any(s => s.Equals(extension, StringComparison.OrdinalIgnoreCase)))
                     {
                         // 如果是支持的图片类型，上传图片
                         var imgUrl = ImageUploader.Upload(dropFilePath);
