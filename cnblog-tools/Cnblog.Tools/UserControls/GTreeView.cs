@@ -81,10 +81,23 @@ namespace Cnblog.Tools
         public GTreeView()
             : base()
         {
-            this.DrawMode = TreeViewDrawMode.OwnerDrawText;
-            this.SetStyle(ControlStyles.AllPaintingInWmPaint , true);
             // 开启双缓冲
             this.DoubleBuffered = true;
+            this.DrawMode = TreeViewDrawMode.OwnerDrawText;
+            this.SetStyle(ControlStyles.DoubleBuffer |
+                          ControlStyles.OptimizedDoubleBuffer |
+                          ControlStyles.AllPaintingInWmPaint |
+                          ControlStyles.ResizeRedraw , true);
+            this.UpdateStyles();
+        }
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                cp.ExStyle |= 0x02000000; // WS_EX_COMPOSITED
+                return cp;
+            }
         }
 
         ///<summary>
