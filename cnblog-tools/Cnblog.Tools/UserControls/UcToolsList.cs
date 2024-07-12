@@ -28,6 +28,16 @@ namespace Cnblog.Tools
             this.Load += new EventHandler(Uc_Loaded);
         }
 
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                cp.ExStyle |= 0x02000000; // WS_EX_COMPOSITED
+                return cp;
+            }
+        }
+
         private void Uc_Loaded(object? sender, EventArgs e)
         {
             InitializeTools();
