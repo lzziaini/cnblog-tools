@@ -529,15 +529,6 @@ namespace Cnblog.Tools
             }
         }
 
-        /// <summary>
-        /// 在控制台输出内容的方法，输出一行到控制台
-        /// </summary>
-        /// <param name="content"></param>
-        private void echo(string content)
-        {
-            // 将传入的内容追加到文本框中，每条内容后面追加换行符
-            this.textConsole.Text += $"{content}\r\n";
-        }
 
         #region panel 样式
 
@@ -680,5 +671,22 @@ namespace Cnblog.Tools
             listboxPreProcessFiles.Items.Clear();
             listboxPreProcessFiles.Items.AddRange(preProcessFiles.ToArray());
         }
+
+
+        #region 日志显示
+        /// <summary>
+        /// 在控制台输出内容的方法，输出一行到控制台
+        /// </summary>
+        /// <param name="content"></param>
+        private void echo(string content)
+        {
+            // 将传入的内容追加到文本框中，每条内容后面追加换行符
+            this.textConsole.Text += $"{content}\r\n";
+        }
+        private void btnClearLog_Click(object sender, EventArgs e)
+        {
+            this.textConsole.Text = "日志显示清理完毕\r\n";
+        }
+        #endregion
     }
 }

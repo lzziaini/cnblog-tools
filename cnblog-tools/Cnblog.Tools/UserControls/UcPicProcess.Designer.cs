@@ -30,6 +30,7 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UcPicProcess));
+            Button btnClearLog;
             panel1 = new Panel();
             btnSelectFold = new Button();
             comboxPath = new ComboBox();
@@ -47,6 +48,7 @@
             pictureBox1 = new PictureBox();
             contextMenuStrip1 = new ContextMenuStrip(components);
             menuItemNewDraft = new ToolStripMenuItem();
+            btnClearLog = new Button();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -122,8 +124,10 @@
             // 
             treeViewFolder.AllowDrop = true;
             treeViewFolder.Dock = DockStyle.Fill;
+            treeViewFolder.DrawMode = TreeViewDrawMode.OwnerDrawText;
             treeViewFolder.ImageIndex = 0;
             treeViewFolder.ImageList = IconList;
+            treeViewFolder.IsMultiSelect = false;
             treeViewFolder.Location = new Point(0, 0);
             treeViewFolder.Margin = new Padding(2, 3, 2, 3);
             treeViewFolder.Name = "treeViewFolder";
@@ -151,7 +155,7 @@
             panel4.Location = new Point(8, 9);
             panel4.Margin = new Padding(2, 3, 2, 3);
             panel4.Name = "panel4";
-            panel4.Size = new Size(584, 118);
+            panel4.Size = new Size(585, 118);
             panel4.TabIndex = 3;
             panel4.Visible = false;
             panel4.Paint += panel4_Paint;
@@ -163,11 +167,12 @@
             listboxPreProcessFiles.ItemHeight = 17;
             listboxPreProcessFiles.Location = new Point(0, 0);
             listboxPreProcessFiles.Name = "listboxPreProcessFiles";
-            listboxPreProcessFiles.Size = new Size(584, 118);
+            listboxPreProcessFiles.Size = new Size(585, 118);
             listboxPreProcessFiles.TabIndex = 0;
             // 
             // panel3
             // 
+            panel3.Controls.Add(btnClearLog);
             panel3.Controls.Add(btnClearDrogFiles);
             panel3.Controls.Add(btnProcessFile);
             panel3.Location = new Point(8, 130);
@@ -206,7 +211,7 @@
             textConsole.Multiline = true;
             textConsole.Name = "textConsole";
             textConsole.ScrollBars = ScrollBars.Both;
-            textConsole.Size = new Size(585, 390);
+            textConsole.Size = new Size(586, 390);
             textConsole.TabIndex = 1;
             textConsole.WordWrap = false;
             // 
@@ -219,7 +224,7 @@
             panel2.Location = new Point(8, 9);
             panel2.Margin = new Padding(2, 3, 2, 3);
             panel2.Name = "panel2";
-            panel2.Size = new Size(584, 118);
+            panel2.Size = new Size(585, 118);
             panel2.TabIndex = 0;
             panel2.DragDrop += panel2_DragDrop;
             panel2.DragEnter += panel2_DragEnter;
@@ -260,6 +265,16 @@
             menuItemNewDraft.Size = new Size(172, 22);
             menuItemNewDraft.Text = "快速编辑发布此文";
             menuItemNewDraft.Click += menuItemNewDraft_Click;
+            // 
+            // btnClearLog
+            // 
+            btnClearLog.Location = new Point(3, 3);
+            btnClearLog.Name = "btnClearLog";
+            btnClearLog.Size = new Size(75, 23);
+            btnClearLog.TabIndex = 1;
+            btnClearLog.Text = "清理日志显示";
+            btnClearLog.UseVisualStyleBackColor = true;
+            btnClearLog.Click += this.btnClearLog_Click;
             // 
             // UcPicProcess
             // 
