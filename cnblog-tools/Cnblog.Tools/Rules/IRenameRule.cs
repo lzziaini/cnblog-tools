@@ -8,6 +8,7 @@ namespace Cnblog.Tools.Rules
 {
     public interface IRenameRule
     {
-        string Apply(string fileName, int index, Dictionary<string, string> macros);
+        string Apply(string fileName, int index, string expression);
+        string Pattern();
     }
 }
