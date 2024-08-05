@@ -1,6 +1,6 @@
 ﻿namespace Cnblog.Tools
 {
-    partial class FormFileRule
+    partial class FormRuleFileName
     {
         /// <summary>
         /// Required designer variable.
@@ -35,11 +35,11 @@
             btnTest = new Button();
             label1 = new Label();
             label2 = new Label();
-            textBox1 = new TextBox();
-            label3 = new Label();
             label4 = new Label();
             tbx_defaultExample = new TextBox();
             label5 = new Label();
+            textBox1 = new TextBox();
+            label3 = new Label();
             SuspendLayout();
             // 
             // lstOriginalFiles
@@ -112,26 +112,6 @@
             label2.Text = "新文件名表达式：";
             label2.TextAlign = ContentAlignment.MiddleRight;
             // 
-            // textBox1
-            // 
-            textBox1.Location = new Point(125, 180);
-            textBox1.Margin = new Padding(4);
-            textBox1.Name = "textBox1";
-            textBox1.ReadOnly = true;
-            textBox1.Size = new Size(359, 23);
-            textBox1.TabIndex = 1;
-            textBox1.Text = "$filename$";
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new Point(14, 183);
-            label3.Name = "label3";
-            label3.Size = new Size(104, 17);
-            label3.TabIndex = 5;
-            label3.Text = "原文件名表达式：";
-            label3.TextAlign = ContentAlignment.MiddleRight;
-            // 
             // label4
             // 
             label4.AutoSize = true;
@@ -160,6 +140,26 @@
             label5.TabIndex = 5;
             label5.Text = "一个默认的案例：";
             label5.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // textBox1
+            // 
+            textBox1.Location = new Point(125, 180);
+            textBox1.Margin = new Padding(4);
+            textBox1.Name = "textBox1";
+            textBox1.ReadOnly = true;
+            textBox1.Size = new Size(359, 23);
+            textBox1.TabIndex = 1;
+            textBox1.Text = "$filename$";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(14, 183);
+            label3.Name = "label3";
+            label3.Size = new Size(104, 17);
+            label3.TabIndex = 5;
+            label3.Text = "原文件名表达式：";
+            label3.TextAlign = ContentAlignment.MiddleRight;
             // 
             // FormFileRule
             // 
@@ -194,10 +194,10 @@
         private Button btnTest;
         private Label label1;
         private Label label2;
-        private TextBox textBox1;
-        private Label label3;
         private Label label4;
         private TextBox tbx_defaultExample;
         private Label label5;
+        private TextBox textBox1;
+        private Label label3;
     }
 }

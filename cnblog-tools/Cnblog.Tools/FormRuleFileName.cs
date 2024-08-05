@@ -1,4 +1,5 @@
-﻿using Cnblog.Tools.Rules;
+﻿using Cnblog.Tools.Models;
+using Cnblog.Tools.Rules;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,21 +14,21 @@ using System.Windows.Forms;
 
 namespace Cnblog.Tools
 {
-    public partial class FormFileRule : Form
+    public partial class FormRuleFileName : Form
     {
         public static readonly string defaultExpressionExample = "$index(`1`)$_$filename$_$datetime(`yyyyMMdd HH:mm:ss`)$";
-        string _finallExpression;
-        public FormFileRule()
+        string _finalExpression;
+        public FormRuleFileName()
         {
         }
-        public FormFileRule(string expression = null,List<string> defaultOriginls = null) : this()
+        public FormRuleFileName(string expression = null,List<string> defaultOriginls = null) : this()
         {
             InitializeComponent();
             Load += FormFileRule_Load;
             tbx_defaultExample.Text = defaultExpressionExample;
 
-            _finallExpression = expression ?? defaultExpressionExample ?? "";
-            txtNewExpression.Text = _finallExpression;
+            _finalExpression = expression ?? defaultExpressionExample ?? "";
+            txtNewExpression.Text = _finalExpression;
 
             if (defaultOriginls != null && !defaultOriginls.Any())
                 SetOriginals(defaultOriginls);
@@ -52,7 +53,7 @@ namespace Cnblog.Tools
             {
                 return null;
             }
-            var finallExpression = this._finallExpression;
+            var finallExpression = this._finalExpression;
             return finallExpression;
         }
         
@@ -75,9 +76,9 @@ namespace Cnblog.Tools
         {
             if (!DoTest())
             {
-                _finallExpression = defaultExpressionExample;
+                _finalExpression = defaultExpressionExample;
             }
-            else _finallExpression = txtNewExpression.Text;
+            else _finalExpression = txtNewExpression.Text;
 
             this.DialogResult = DialogResult.OK;
             this.Close();

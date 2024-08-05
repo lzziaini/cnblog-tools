@@ -1,4 +1,5 @@
-﻿using CnBlogPublishTool;
+﻿using Cnblog.Tools.Rules;
+using CnBlogPublishTool;
 using CnBlogPublishTool.Processor;
 using CnBlogPublishTool.Util;
 using MetaWeblogClient;
@@ -8,6 +9,7 @@ using System.Diagnostics;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
@@ -306,7 +308,7 @@ namespace Cnblog.Tools
             // 创建一个数据对象，用于存储拖动的数据
             IDataObject data = new DataObject();
             var tree = sender as GTreeView;
-            if(tree != null)
+            if (tree != null)
             {
                 // 将拖动的节点添加到数据对象中
                 //data.SetData("dragnode", e.Item);
@@ -388,8 +390,8 @@ namespace Cnblog.Tools
                 {
                     // 转换为树节点
                     var nodes = nodeItems as List<TreeNode>;
-                    if(nodes != null)
-                        dropFilePaths = nodes.Select(n=>n.Name).ToList();
+                    if (nodes != null)
+                        dropFilePaths = nodes.Select(n => n.Name).ToList();
                 }
                 else
                 {
@@ -398,7 +400,7 @@ namespace Cnblog.Tools
                     dropFilePaths = (e.Data?.GetData(DataFormats.FileDrop) as string[])?.ToList();
                 }
 
-                if (dropFilePaths == null || !dropFilePaths.Any()) 
+                if (dropFilePaths == null || !dropFilePaths.Any())
                 {
                     return;
                 }
@@ -458,7 +460,7 @@ namespace Cnblog.Tools
         /// 处理文件的方法，用于上传图片并替换Markdown中的图片链接
         /// </summary>
         /// <param name="filePath"></param>
-        private void processFile(string filePath)
+        private void processFile(string filePath,int index = 0)
         {
             // 读取Markdown文件内容
             // 提取图片链接
@@ -520,9 +522,12 @@ namespace Cnblog.Tools
                         _fileContent = _fileContent.Replace(key, ReplaceDic[key]);
                     }
 
+                    FileRenamer fileRenamer = new FileRenamer();
+                    var newFileName = fileRenamer.RenameFile(filePath, index, _finallExpression);
                     //var newFileName = filePath.Substring(0, filePath.LastIndexOf('.')) + "-cnblog" + Path.GetExtension(filePath);
-                    var newFileName = filePath;///TODO 此处后续拓展存图规则
+                    //var newFileName = filePath;
 					File.WriteAllText(newFileName, _fileContent, EncodingType.GetType(filePath));
+                    //TODO 是否删除源文件
 
                     echo($"共提取图片{imgList.Count}，上传成功{uploadSuccess}张，处理完成!");
                     echo($"处理后文件保存在：{newFileName}");
@@ -627,8 +632,9 @@ namespace Cnblog.Tools
                     // 如果是Markdown文件
                     if (extension.Contains(".md", StringComparison.OrdinalIgnoreCase))
                     {
+                        var index = preProcessFiles.IndexOf(dropFilePath);
                         // 处理文件（上传图片并替换Markdown中的图片链接）
-                        processFile(dropFilePath);
+                        processFile(dropFilePath,index);
                     }
                     else if (Const.SupportImageType.Any(s => s.Equals(extension, StringComparison.OrdinalIgnoreCase)))
                     {
@@ -691,6 +697,14 @@ namespace Cnblog.Tools
         private void btnClearLog_Click(object sender, EventArgs e)
         {
             this.textConsole.Text = "日志显示清理完毕\r\n";
+        }
+        #endregion
+
+        #region 规则配置
+        string _finallExpression = FormRuleFileName.defaultExpressionExample;
+        private void btnRuleConfig_Click(object sender, EventArgs e)
+        {
+            _finallExpression = new FormFileRule(_finallExpression).GetFinallExpression();
         }
         #endregion
     }
