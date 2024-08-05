@@ -25,6 +25,11 @@ namespace Cnblog.Tools.Rules
             return fileNameWithoutEx; // 如果没有匹配，返回原始文件名
         }
 
+        public string DefaultExample()
+        {
+            return null;
+        }
+
         public string Pattern()
         {
             return null;

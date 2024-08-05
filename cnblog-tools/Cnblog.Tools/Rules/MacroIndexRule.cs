@@ -39,7 +39,11 @@ namespace Cnblog.Tools.Rules
 
         public string Pattern()
         {
-            return @"\$index\(`(\d+)`\)\$"; 
+            return @"\$index\(`(\d+)`\)\$";
+        }
+        public string DefaultExample()
+        {
+            return @"$index(`0`)$";
         }
     }
 }

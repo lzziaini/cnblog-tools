@@ -15,13 +15,22 @@ namespace Cnblog.Tools
 {
     public partial class FormFileRule : Form
     {
-
-        readonly string defauleExpression = new MacroOrginFileRule().Pattern();
+        public static readonly string defaultExpressionExample = "$index(`1`)$_$filename$_$datetime(`yyyyMMdd HH:mm:ss`)$";
         string _finallExpression;
         public FormFileRule()
         {
+        }
+        public FormFileRule(string expression = null,List<string> defaultOriginls = null) : this()
+        {
             InitializeComponent();
             Load += FormFileRule_Load;
+            tbx_defaultExample.Text = defaultExpressionExample;
+
+            _finallExpression = expression ?? defaultExpressionExample ?? "";
+            txtNewExpression.Text = _finallExpression;
+
+            if (defaultOriginls != null && !defaultOriginls.Any())
+                SetOriginals(defaultOriginls);
         }
 
         public void SetOriginals(List<string> strings)
@@ -38,8 +47,15 @@ namespace Cnblog.Tools
         }
         public string GetFinallExpression()
         {
-            return _finallExpression;
+            var dialog = this.ShowDialog();
+            if (dialog != DialogResult.OK)
+            {
+                return null;
+            }
+            var finallExpression = this._finallExpression;
+            return finallExpression;
         }
+        
 
         private void FormFileRule_Load(object sender, EventArgs e)
         {
@@ -59,9 +75,12 @@ namespace Cnblog.Tools
         {
             if (!DoTest())
             {
-                _finallExpression = defauleExpression;
+                _finallExpression = defaultExpressionExample;
             }
             else _finallExpression = txtNewExpression.Text;
+
+            this.DialogResult = DialogResult.OK;
+            this.Close();
         }
 
         private bool DoTest()

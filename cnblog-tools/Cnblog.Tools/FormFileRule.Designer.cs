@@ -38,6 +38,8 @@
             textBox1 = new TextBox();
             label3 = new Label();
             label4 = new Label();
+            tbx_defaultExample = new TextBox();
+            label5 = new Label();
             SuspendLayout();
             // 
             // lstOriginalFiles
@@ -57,11 +59,10 @@
             txtNewExpression.Name = "txtNewExpression";
             txtNewExpression.Size = new Size(359, 23);
             txtNewExpression.TabIndex = 1;
-            txtNewExpression.Text = "$filename$";
             // 
             // btnRename
             // 
-            btnRename.Location = new Point(446, 408);
+            btnRename.Location = new Point(446, 433);
             btnRename.Margin = new Padding(4);
             btnRename.Name = "btnRename";
             btnRename.Size = new Size(88, 30);
@@ -74,7 +75,7 @@
             // 
             lstPreView.FormattingEnabled = true;
             lstPreView.ItemHeight = 17;
-            lstPreView.Location = new Point(12, 260);
+            lstPreView.Location = new Point(12, 285);
             lstPreView.Margin = new Padding(4);
             lstPreView.Name = "lstPreView";
             lstPreView.Size = new Size(520, 140);
@@ -94,7 +95,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(14, 239);
+            label1.Location = new Point(14, 264);
             label1.Name = "label1";
             label1.Size = new Size(92, 17);
             label1.TabIndex = 5;
@@ -141,18 +142,39 @@
             label4.Text = "原始文件名：";
             label4.TextAlign = ContentAlignment.MiddleRight;
             // 
+            // tbx_defaultExample
+            // 
+            tbx_defaultExample.Location = new Point(125, 240);
+            tbx_defaultExample.Margin = new Padding(4);
+            tbx_defaultExample.Name = "tbx_defaultExample";
+            tbx_defaultExample.ReadOnly = true;
+            tbx_defaultExample.Size = new Size(359, 23);
+            tbx_defaultExample.TabIndex = 1;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(14, 243);
+            label5.Name = "label5";
+            label5.Size = new Size(104, 17);
+            label5.TabIndex = 5;
+            label5.Text = "一个默认的案例：";
+            label5.TextAlign = ContentAlignment.MiddleRight;
+            // 
             // FormFileRule
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(546, 446);
+            ClientSize = new Size(546, 471);
             Controls.Add(label4);
             Controls.Add(label3);
+            Controls.Add(label5);
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(btnTest);
             Controls.Add(btnRename);
             Controls.Add(textBox1);
+            Controls.Add(tbx_defaultExample);
             Controls.Add(txtNewExpression);
             Controls.Add(lstPreView);
             Controls.Add(lstOriginalFiles);
@@ -175,5 +197,7 @@
         private TextBox textBox1;
         private Label label3;
         private Label label4;
+        private TextBox tbx_defaultExample;
+        private Label label5;
     }
 }

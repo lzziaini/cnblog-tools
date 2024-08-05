@@ -74,7 +74,7 @@ namespace Cnblog.Tools.Rules
             _rules.ForEach(rule =>
             {
                 var pattern = rule.Pattern();
-                var res = Regex.IsMatch(input, pattern);
+                match = Regex.IsMatch(input, pattern);
             });
 
             return match;

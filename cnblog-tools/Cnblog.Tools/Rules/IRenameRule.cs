@@ -10,5 +10,6 @@ namespace Cnblog.Tools.Rules
     {
         string Apply(string fileName, int index, string expression);
         string Pattern();
+        string DefaultExample();
     }
 }

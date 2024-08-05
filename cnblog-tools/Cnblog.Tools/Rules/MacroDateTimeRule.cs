@@ -50,5 +50,9 @@ namespace Cnblog.Tools.Rules
         {
             return @"\$datetime\(`([^`]+)`\)\$";
         }
+        public string DefaultExample()
+        {
+            return @"$datetime(`yyyyMMdd HH:mm:ss`)$";
+        }
     }
 }
